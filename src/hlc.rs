@@ -1,5 +1,8 @@
 use chrono::{TimeZone, Utc};
 use std::cmp::max;
+use std::hash::{Hash, Hasher};
+
+use fasthash::{murmur, FastHasher, MurmurHasher};
 
 struct Timestamp {
     millis: i64,
@@ -46,6 +49,34 @@ impl Timestamp {
         self.counter = c_new;
 
         Ok(())
+    }
+
+    pub fn millis(&self) -> i64 {
+        self.millis
+    }
+
+    pub fn counter(&self) -> i64 {
+        self.counter
+    }
+
+    pub fn node(&self) -> i64 {
+        self.node
+    }
+
+    pub fn hash(&self) -> u32 {
+        murmur::hash32(self.to_string())
+    }
+
+    pub fn set_millis(&mut self, millis: i64) {
+        self.millis = millis;
+    }
+
+    pub fn set_counter(&mut self, counter: i64) {
+        self.counter = counter;
+    }
+
+    pub fn set_node(&mut self, node: i64) {
+        self.node = node;
     }
 }
 
